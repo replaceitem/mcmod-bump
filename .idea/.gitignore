@@ -1,0 +1,8 @@
+# ignore all except explicitly specified
+/*
+
+!/.gitignore
+!/compiler.xml
+!/gradle.xml
+!/misc.xml
+!/vcs.xml
