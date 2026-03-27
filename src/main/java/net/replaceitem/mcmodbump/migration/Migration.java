@@ -1,7 +1,7 @@
-package net.replaceitem.mcmodbump.update;
+package net.replaceitem.mcmodbump.migration;
 
 import net.replaceitem.mcmodbump.context.Context;
 
-public interface Update {
+public interface Migration {
     void update(Context context);
 }

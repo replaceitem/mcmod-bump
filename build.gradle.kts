@@ -12,6 +12,7 @@ repositories {
 dependencies {
     compileOnly("org.jetbrains:annotations:26.1.0")
     compileOnly("org.jspecify:jspecify:1.0.0")
+    implementation("org.jline:jansi:4.0.9")
 }
 
 tasks.test {
