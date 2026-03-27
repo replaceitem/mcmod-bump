@@ -1,4 +1,6 @@
-package net.replaceitem.mcmodbump;
+package net.replaceitem.mcmodbump.context;
+
+import net.replaceitem.mcmodbump.context.file.FileContext;
 
 import java.nio.file.Path;
 import java.util.HashMap;

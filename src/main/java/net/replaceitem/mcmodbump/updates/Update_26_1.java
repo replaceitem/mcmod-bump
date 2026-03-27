@@ -1,4 +1,7 @@
-package net.replaceitem.mcmodbump;
+package net.replaceitem.mcmodbump.updates;
+
+import net.replaceitem.mcmodbump.context.Context;
+import net.replaceitem.mcmodbump.update.Update;
 
 public class Update_26_1 implements Update {
 
