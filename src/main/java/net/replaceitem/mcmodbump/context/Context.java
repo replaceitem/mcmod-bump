@@ -134,7 +134,7 @@ public class Context implements AutoCloseable {
         }
     }
 
-    protected void log(String text) {
+    public void log(String text) {
         System.out.println(Ansi.ansi().fgBrightBlue().fg(Ansi.Color.GREEN).a("[Context] ").reset().a(text));
     }
 

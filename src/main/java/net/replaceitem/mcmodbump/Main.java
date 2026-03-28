@@ -11,7 +11,12 @@ public class Main {
         if(migration == null) throw new RuntimeException("Could not find version " + version);
 
         try(var context = new Context(Path.of("."))) {
-            migration.update(context);
+            try {
+                migration.update(context);
+            } catch (Exception e) {
+                context.log("Updating failed");
+                e.printStackTrace(System.out);
+            }
         }
     }
 }

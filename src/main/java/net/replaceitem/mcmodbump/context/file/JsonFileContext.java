@@ -2,42 +2,81 @@ package net.replaceitem.mcmodbump.context.file;
 
 import com.google.gson.JsonElement;
 import net.replaceitem.mcmodbump.context.file.handle.JsonFileHandle;
+import org.jspecify.annotations.Nullable;
 
 import java.util.Arrays;
 import java.util.List;
 
-public class JsonFileContext {
-    private final JsonFileHandle handle;
+public class JsonFileContext extends FileContext<JsonFileHandle> {
 
     public JsonFileContext(JsonFileHandle handle) {
-        this.handle = handle;
+        super(handle);
     }
 
-    public void setValue(String path, String value) {
-        var jsonPath = parsePath(path);
-        var objectPath = jsonPath.subList(0, jsonPath.size() - 1);
-        var leafPath = jsonPath.getLast();
-        var elem = getElement(objectPath);
-        elem.getAsJsonObject().addProperty(leafPath, value);
+    public JsonPath path(String path) {
+        return new JsonPath(parsePath(path));
     }
 
-    public void removeValue(String path) {
-        var jsonPath = parsePath(path);
-        var objectPath = jsonPath.subList(0, jsonPath.size() - 1);
-        var leafPath = jsonPath.getLast();
-        var elem = getElement(objectPath);
-        elem.getAsJsonObject().remove(leafPath);
+    public class JsonPath {
+        private final List<String> path;
+
+        public List<String> tailPath() {
+            return path.subList(0, path.size() - 1);
+        }
+
+        public String leafPath() {
+            return path.getLast();
+        }
+
+        public JsonPath(List<String> path) {
+            this.path = path;
+        }
+
+        public void setValue(String value) {
+            JsonElement leafParent = getLeafParent();
+            if(leafParent != null && leafParent.isJsonObject()) {
+                leafParent.getAsJsonObject().addProperty(leafPath(), value);
+            }
+        }
+
+        public void setValueIfPresent(String value) {
+            JsonElement leafParent = getLeafParent();
+            if(leafParent != null && leafParent.isJsonObject() && leafParent.getAsJsonObject().has(leafPath())) {
+                leafParent.getAsJsonObject().addProperty(leafPath(), value);
+            }
+        }
+
+        public void removeValue() {
+            JsonElement leafParent = getLeafParent();
+            if(leafParent != null && leafParent.isJsonObject()) {
+                leafParent.getAsJsonObject().remove(leafPath());
+            }
+        }
+
+        public boolean exists() {
+            JsonElement leafParent = getLeafParent();
+            return leafParent != null && leafParent.isJsonObject() && leafParent.getAsJsonObject().has(leafPath());
+        }
+
+        @Nullable
+        private JsonElement getLeafParent() {
+            return getElement(tailPath());
+        }
+
+        @Nullable
+        private JsonElement getElement(List<String> path) {
+            var elem = handle.getRootElement();
+            for (String s : path) {
+                if(elem == null) break;
+                if(!elem.isJsonObject()) return null;
+                elem = elem.getAsJsonObject().get(s);
+            }
+            return elem;
+        }
     }
+
 
     private List<String> parsePath(String path) {
         return Arrays.stream(path.split("\\.")).toList();
-    }
-
-    private JsonElement getElement(List<String> path) {
-        var elem = handle.getRootElement();
-        for (String s : path) {
-            elem = elem.getAsJsonObject().get(s);
-        }
-        return elem;
     }
 }

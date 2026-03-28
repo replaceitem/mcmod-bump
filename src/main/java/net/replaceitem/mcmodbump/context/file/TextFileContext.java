@@ -3,17 +3,15 @@ package net.replaceitem.mcmodbump.context.file;
 import net.replaceitem.mcmodbump.context.file.handle.TextFileHandle;
 import net.replaceitem.mcmodbump.util.StringUtil;
 import org.intellij.lang.annotations.Language;
-import org.jline.jansi.Ansi;
 
 import java.util.Arrays;
 import java.util.regex.MatchResult;
 import java.util.regex.Pattern;
 
-public class TextFileContext {
-    private final TextFileHandle handle;
+public class TextFileContext extends FileContext<TextFileHandle> {
 
     public TextFileContext(TextFileHandle handle) {
-        this.handle = handle;
+        super(handle);
     }
 
 
@@ -46,9 +44,5 @@ public class TextFileContext {
 
     public boolean find(@Language("RegExp") String regex) {
         return Pattern.compile(regex, Pattern.MULTILINE).matcher(handle.getContent()).find();
-    }
-
-    protected void log(String text) {
-        System.out.println(Ansi.ansi().a(handle.getLogLabel()).a(" ").a(text));
     }
 }
