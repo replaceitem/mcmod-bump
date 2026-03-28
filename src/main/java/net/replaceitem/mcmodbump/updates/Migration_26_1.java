@@ -28,10 +28,28 @@ public class Migration_26_1 implements Migration {
         }
 
         // accesswideners
-        context.findAllFiles("src", "\\.accesswidener$").forEach(path -> context.openTextFile(path).replaceGroups("accessWidener\\s+v\\d\\s+(named)", "official"));
+        context.findAllFiles("src", "\\.accesswidener$").forEach(path -> {
+            var accesswidener = context.openTextFile(path);
+            accesswidener.replaceGroups("accessWidener\\s+v\\d\\s+(named)", "official");
+        });
 
         // minotaur
         buildGradle.replaceGroups("uploadFile *= *(remapJar)", "jar");
+
+        // fabric.mod.json
+        context.findAllFiles("src", "^fabric\\.mod\\.json$").forEach(path -> {
+            var fabricModJson = context.openJsonFile(path);
+            fabricModJson.setValue("depends.minecraft", ">=26.1");
+            fabricModJson.setValue("depends.fabricloader", ">=0.18.4");
+            fabricModJson.removeValue("depends.fabric");
+            fabricModJson.setValue("depends.fabric-api", ">=0.144.0");
+        });
+
+        // modid.mixins.json
+        context.findAllFiles("src", "\\.mixins\\.json$").forEach(path -> {
+            var mixinsJson = context.openJsonFile(path);
+            mixinsJson.setValue("compatibilityLevel", "JAVA_25");
+        });
 
 
         context.saveFiles();
