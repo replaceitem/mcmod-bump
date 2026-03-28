@@ -1,8 +1,10 @@
 package net.replaceitem.mcmodbump.context;
 
+import net.replaceitem.mcmodbump.context.file.JsonFileContext;
 import net.replaceitem.mcmodbump.context.file.PropertiesFileContext;
 import net.replaceitem.mcmodbump.context.file.TextFileContext;
 import net.replaceitem.mcmodbump.context.file.handle.FileHandle;
+import net.replaceitem.mcmodbump.context.file.handle.JsonFileHandle;
 import net.replaceitem.mcmodbump.context.file.handle.TextFileHandle;
 import org.intellij.lang.annotations.Language;
 import org.jline.jansi.Ansi;
@@ -43,6 +45,18 @@ public class Context implements AutoCloseable {
         return handle;
     }
 
+    protected JsonFileHandle getJsonFileHandle(Path path) {
+        var existing = openFiles.get(path);
+        if (existing != null) {
+            if (!(existing instanceof JsonFileHandle jsonFileHandle))
+                throw new RuntimeException("File was previously opened as not a json file");
+            return jsonFileHandle;
+        }
+        var handle = new JsonFileHandle(path);
+        this.openFiles.put(path, handle);
+        return handle;
+    }
+
     public TextFileContext openTextFile(String path) {
         return openTextFile(resolvePath(path));
     }
@@ -55,6 +69,13 @@ public class Context implements AutoCloseable {
     }
     public PropertiesFileContext openPropertiesFile(Path path) {
         return new PropertiesFileContext(getTextFileHandle(path));
+    }
+
+    public JsonFileContext openJsonFile(String path) {
+        return openJsonFile(resolvePath(path));
+    }
+    public JsonFileContext openJsonFile(Path path) {
+        return new JsonFileContext(getJsonFileHandle(path));
     }
 
     @Override
