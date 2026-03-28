@@ -44,6 +44,7 @@ public class Migration_26_1 implements Migration {
             var fabricModJson = context.openJsonFile(path);
             fabricModJson.path("depends.minecraft").setValueIfPresent(">=26.1");
             fabricModJson.path("depends.fabricloader").setValueIfPresent(">=0.18.4");
+            fabricModJson.path("depends.java").setValueIfPresent(">=25");
 
             if(fabricModJson.path("depends.fabric").exists() || fabricModJson.path("depends.fabric-api").exists()) {
                 fabricModJson.path("depends.fabric").removeValue();
