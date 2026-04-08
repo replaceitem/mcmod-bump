@@ -12,16 +12,16 @@ public class PropertiesFileContext extends TextFileContext {
     }
 
     public void setProperty(String property, String replacement) {
-        this.replaceGroupsImpl("^ *%s *= *([^#]*?) *(?:#.*)?$".formatted(Pattern.quote(escapeKey(property))), escapeValue(replacement));
+        this.replaceGroupsImpl("^\\s*%s *= *([^#]*?) *(?:#.*)?$".formatted(Pattern.quote(escapeKey(property))), escapeValue(replacement));
         log("Set property " + property + " to " + replacement);
     }
 
     public boolean hasProperty(String property) {
-        return this.find("^ *%s *=".formatted(Pattern.quote(escapeKey(property))));
+        return this.find("^\\s*%s *=".formatted(Pattern.quote(escapeKey(property))));
     }
 
     public void renameProperty(String property, String newName) {
-        this.replaceGroupsImpl("^ *(%s) *=".formatted(Pattern.quote(escapeKey(property))), escapeKey(newName));
+        this.replaceGroupsImpl("^\\s*(%s) *=".formatted(Pattern.quote(escapeKey(property))), escapeKey(newName));
         log("Renamed property " + property + " to " + newName);
     }
 

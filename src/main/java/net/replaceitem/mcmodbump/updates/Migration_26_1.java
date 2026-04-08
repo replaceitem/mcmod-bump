@@ -21,12 +21,12 @@ public class Migration_26_1 implements Migration {
         gradleProperties.setProperty("loom_version", "1.15-SNAPSHOT");
         gradleProperties.setProperty("fabric_api_version", "0.144.0+26.1");
 
-        buildGradle.replaceGroups("^ *id +['\"]((?:net\\.fabricmc\\.)?fabric-loom(?:-remap)?)['\"]", "net.fabricmc.fabric-loom");
+        buildGradle.replaceGroups("^\\s*id +['\"]((?:net\\.fabricmc\\.)?fabric-loom(?:-remap)?)['\"]", "net.fabricmc.fabric-loom");
 
         buildGradle.replaceGroups("(modImplementation) *\\(? *[\"']", "implementation");
         buildGradle.replaceGroups("(modCompileOnly) *\\(? *[\"']", "compileOnly");
 
-        buildGradle.replace("^ *mappings +loom\\.officialMojangMappings\\( *\\) *\\R", "");
+        buildGradle.replace("^\\s*mappings +loom\\.officialMojangMappings\\( *\\) *\\R", "");
         buildGradle.replaceGroups("def +targetJavaVersion *= *(\\d+)", "25");
         buildGradle.replaceGroups("it.options.release *= *(\\d+)", "25");
 
